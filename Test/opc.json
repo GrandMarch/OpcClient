@@ -1,0 +1,18 @@
+{
+    "OpcServer": "Matrikon.OPC.Simulation.1",
+    "Host": "localhost",
+    "Groups": [
+        {
+            "Name": "g1",
+            "Active": true,
+            "DeadBand": 0.0,
+            "UpdateRate": 1000,
+            "Items": [
+                {
+                    "Name": "Random.Real4",
+                    "DataType": 4
+                }
+            ]
+        }
+    ]
+}
