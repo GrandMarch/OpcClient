@@ -16,7 +16,7 @@ namespace OpcDaClient.Db
         /// <summary>
         /// 所有的点名都不能重复
         /// </summary>
-        private SortedList<string, OpcDaClient.Da.OpcItem> _db = new SortedList<string, OpcDaClient.Da.OpcItem>();
+        public SortedList<string, OpcDaClient.Da.OpcItem> Database = new SortedList<string, OpcDaClient.Da.OpcItem>();
         /// <summary>
         /// server
         /// </summary>
@@ -31,7 +31,7 @@ namespace OpcDaClient.Db
             {
                 try
                 {
-                    OpcDaClient.Da.OpcItem item = _db[name];
+                    OpcDaClient.Da.OpcItem item = Database[name];
                     return item.Value;
                 }
                 catch (Exception)
@@ -87,7 +87,7 @@ namespace OpcDaClient.Db
                         {
                             OpcDaClient.Da.OpcItem opcItem = new Da.OpcItem(item.Name, item.DataType);
                             g.AddOpcItem(new Da.OpcItem[] { opcItem });
-                            _db.Add(opcItem.Name, opcItem);
+                            Database.Add(opcItem.Name, opcItem);
                         }
                     }
                 }
