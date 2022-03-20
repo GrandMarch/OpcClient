@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpcDaClient", "OpcDaClient\OpcDaClient.csproj", "{F36A7CEA-194F-4F7B-A8A7-46F950311864}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{7641E862-2D86-49AF-89B6-A10615DA67E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{F36A7CEA-194F-4F7B-A8A7-46F950311864}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F36A7CEA-194F-4F7B-A8A7-46F950311864}.Release|x86.ActiveCfg = Release|x86
 		{F36A7CEA-194F-4F7B-A8A7-46F950311864}.Release|x86.Build.0 = Release|x86
+		{7641E862-2D86-49AF-89B6-A10615DA67E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7641E862-2D86-49AF-89B6-A10615DA67E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7641E862-2D86-49AF-89B6-A10615DA67E7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7641E862-2D86-49AF-89B6-A10615DA67E7}.Debug|x86.Build.0 = Debug|Any CPU
+		{7641E862-2D86-49AF-89B6-A10615DA67E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7641E862-2D86-49AF-89B6-A10615DA67E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7641E862-2D86-49AF-89B6-A10615DA67E7}.Release|x86.ActiveCfg = Release|Any CPU
+		{7641E862-2D86-49AF-89B6-A10615DA67E7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
