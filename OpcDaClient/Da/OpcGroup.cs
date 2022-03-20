@@ -118,7 +118,7 @@ namespace OpcDaClient.Da
         /// datachange subscribe
         /// </summary>
         //public event EventHandler<OpcEventArgs>? OnDataChanged;\
-        public event OnDataChangedHandler OnDataChanged;
+        public event OnDataChangedHandler? OnDataChanged;
         /// <summary>
         /// write async
         /// </summary>
