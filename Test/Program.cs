@@ -3,6 +3,7 @@ ConsoleKeyInfo cki;
 OpcDaClient.Db.Manager manager = new OpcDaClient.Db.Manager();
 manager.Init();
 manager.Run();
+string [] tags=manager.GetTagName();
 while (true)
 {
     Console.WriteLine("Press R to Read Value");
@@ -11,7 +12,10 @@ while (true)
     cki = Console.ReadKey();
     if (cki.Key == ConsoleKey.R)
     {
-        Console.WriteLine("{0}-{1}", "Random.Real4",manager["Random.Real4"]);
+        foreach (string s in tags)
+        {
+            Console.WriteLine("{0}\t{1}", s, manager[s]);
+        }
     }
     if (cki.Key == ConsoleKey.C)
     {
