@@ -10,7 +10,7 @@ while (true)
     cki = Console.ReadKey();
     if (cki.Key == ConsoleKey.R)
     {
-        
+        Console.WriteLine("{0}-{1}", "Random.Real4",manager["Random.Real4"]);
     }
     if (cki.Key == ConsoleKey.X)
     {

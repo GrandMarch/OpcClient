@@ -179,6 +179,10 @@ namespace OpcDaClient.Da
                 {
                     if (errors[j] == 0)
                     {
+                        if (j != 0)
+                        {
+                            Pos = new IntPtr(Pos.ToInt32() + Marshal.SizeOf(typeof(OpcRcw.Da.OPCITEMRESULT)));
+                        }
                         object? o = Marshal.PtrToStructure(Pos, typeof(OpcRcw.Da.OPCITEMRESULT));
                         if (o != null)
                         {
@@ -187,8 +191,6 @@ namespace OpcDaClient.Da
                             Marshal.DestroyStructure(Pos, typeof(OpcRcw.Da.OPCITEMRESULT));
                             opcItems.Add(items[j]);
                         }
-                        Pos = new IntPtr(Pos.ToInt32() + Marshal.SizeOf(typeof(OpcRcw.Da.OPCITEMRESULT)));
-
                     }
                 }
             }
