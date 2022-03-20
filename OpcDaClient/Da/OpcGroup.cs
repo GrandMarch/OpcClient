@@ -113,7 +113,7 @@ namespace OpcDaClient.Da
 
         #region Event
 
-        public delegate void OnDataChangedHandler(OpcItem[] opcItems);
+        
         /// <summary>
         /// datachange subscribe
         /// </summary>
@@ -122,12 +122,11 @@ namespace OpcDaClient.Da
         /// <summary>
         /// write async
         /// </summary>
-        public event EventHandler<OpcEventArgs>? OnWriteCompleted;
+        public event OnWriteCompletedHandler? OnWriteCompleted;
         /// <summary>
         /// read async
         /// </summary>
-        public event EventHandler<OpcEventArgs>? OnReadCompleted;
-
+        public event OnReadCompletedHandler? OnReadCompleted;
         #endregion
         internal OpcGroup(string name)
         {
@@ -250,7 +249,7 @@ namespace OpcDaClient.Da
         /// <param name="serverHandle"></param>
         /// <param name="errors"></param>
         /// <param name="opcGroup"></param>
-        public void WriteAsync(object[] values, int[] serverHandle, out int[] errors, OpcGroup opcGroup)
+        public void WriteAsync(object[] values, int[] serverHandle,out int[] errors)
         {
             IntPtr pErrors = IntPtr.Zero;
             errors = new int[values.Length];
@@ -348,22 +347,27 @@ namespace OpcDaClient.Da
         {
             if (OnDataChanged != null)
             {
-                List<OpcItem> itemChanged=new List<OpcItem>();
+                List<ItemReadResult> itemChanged=new List<ItemReadResult>();
                 for (int i = 0; i < dwCount; i++)
                 {
                     int index = opcItems.FindIndex(x => x.ClientHandle == phClientItems[i]);
                     if (index >= 0)
                     {
-                        opcItems[index].Value=pvValues[i];
-                        opcItems[index].Quality=pwQualities[i];
-                        opcItems[index].TimeStamp= OpcDaClient.Comn.Convert.FileTimeToDateTime(pftTimeStamps[i]);
-                        itemChanged.Add(opcItems[index]);
+                        opcItems[index].Value = pvValues[i];
+                        opcItems[index].Quality = pwQualities[i];
+                        opcItems[index].TimeStamp = OpcDaClient.Comn.Convert.FileTimeToDateTime(pftTimeStamps[i]);
+                        itemChanged.Add(new ItemReadResult
+                        {
+                            Name = opcItems[index].Name,
+                            Value = pvValues[i],
+                            Quality = pwQualities[i],
+                            TimeStamp = opcItems[index].TimeStamp
+                        });
                     }
                 }
                 OnDataChanged.Invoke(itemChanged.ToArray());
             }
-            Console.WriteLine("-==========OnDataChange Event==========-");
-
+            Console.WriteLine("-==========OnDataChange Event - Group:{0}==========-",Name);
         }
 
         public void OnReadComplete(int dwTransid,
@@ -377,16 +381,29 @@ namespace OpcDaClient.Da
                                     System.Runtime.InteropServices.ComTypes.FILETIME[] pftTimeStamps,
                                     int[] pErrors)
         {
-            var e = new OpcEventArgs
+            if (null != OnReadCompleted)
             {
-                GroupHandle = hGroup,
-                Count = dwCount,
-                Errors = pErrors,
-                Values = pvValues,
-                ClientItemsHandle = phClientItems
-            };
-            OnReadCompleted?.Invoke(this, e);
-            Console.WriteLine("-==========OnReadComplete Event==========-");
+                List<ItemReadResult> itemChanged = new List<ItemReadResult>();
+                for (int i = 0; i < dwCount; i++)
+                {
+                    int index = opcItems.FindIndex(x => x.ClientHandle == phClientItems[i]);
+                    if (index >= 0)
+                    {
+                        opcItems[index].Value = pvValues[i];
+                        opcItems[index].Quality = pwQualities[i];
+                        opcItems[index].TimeStamp = OpcDaClient.Comn.Convert.FileTimeToDateTime(pftTimeStamps[i]);
+                        itemChanged.Add(new ItemReadResult
+                        {
+                            Name = opcItems[index].Name,
+                            Value = pvValues[i],
+                            Quality = pwQualities[i],
+                            TimeStamp = opcItems[index].TimeStamp
+                        });
+                    }
+                }
+                OnReadCompleted?.Invoke(itemChanged.ToArray());
+            }
+            Console.WriteLine("-==========OnReadComplete Event - Group:{0}==========-",Name);
         }
 
         public void OnWriteComplete(int dwTransid,
@@ -396,12 +413,24 @@ namespace OpcDaClient.Da
                                     int[] pClienthandles,
                                     int[] pErrors)
         {
-            var e = new OpcEventArgs
+            if (OnWriteCompleted != null)
             {
-                Errors = pErrors
-            };
-            OnWriteCompleted?.Invoke(this, e);
-            Console.WriteLine("-==========OnWriteComplete Event==========-");
+                List<ItemWriteResult> itemwrite = new List<ItemWriteResult>();
+                for (int i = 0; i < dwCount; i++)
+                {
+                    int index = opcItems.FindIndex(x => x.ClientHandle == pClienthandles[i]);
+                    if (index >= 0)
+                    {
+                        itemwrite.Add(new ItemWriteResult
+                        {
+                            Name = opcItems[index].Name,
+                            Error = pErrors[i]
+                        });
+                    }
+                }
+                OnWriteCompleted.Invoke(itemwrite.ToArray());
+            }
+            Console.WriteLine("-==========OnWriteComplete Event - Group:{0}==========-",Name);
         }
 
         public void OnCancelComplete(int dwTransid, int hGroup)

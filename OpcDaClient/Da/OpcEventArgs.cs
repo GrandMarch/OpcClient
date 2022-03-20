@@ -6,6 +6,23 @@ using System.Threading.Tasks;
 
 namespace OpcDaClient.Da
 {
+    public delegate void OnDataChangedHandler(ItemReadResult[] opcItems);
+    public delegate void OnWriteCompletedHandler(ItemWriteResult[] opcItems);
+    public delegate void OnReadCompletedHandler(ItemReadResult[] opcItems);
+    public class ItemReadResult
+    {
+        public string Name { get; set; } = "";
+        public Comn.OpcDataType DataType { get; set; } = Comn.OpcDataType.Int;
+        public object Value { get; set; } = 0;
+        public DateTime TimeStamp { get; set; }
+        public short Quality { get; set; }
+    }
+    public class ItemWriteResult
+    {
+        public string Name { get; set; } = "";
+        public int Error { get; set; } = 0;
+    }
+
     public class OpcEventArgs: EventArgs
     {
         /// <summary>
