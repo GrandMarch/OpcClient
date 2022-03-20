@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpcDaAsync.Da
+namespace OpcDaClient.Da
 {
 
     public interface IOpcItem

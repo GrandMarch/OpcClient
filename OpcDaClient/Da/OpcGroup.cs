@@ -3,7 +3,7 @@
 using System.Runtime.InteropServices;
 
 
-namespace OpcDaAsync.Da
+namespace OpcDaClient.Da
 {
     public class OpcGroup : OpcRcw.Da.IOPCDataCallback, IDisposable
     {

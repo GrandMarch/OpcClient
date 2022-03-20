@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpcDaAsync.Comn
+namespace OpcDaClient.Comn
 {
     public enum OpcDataType:short
     {
