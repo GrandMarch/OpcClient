@@ -9,11 +9,13 @@ OpcItem[] items = new OpcItem[2];
 items[0] = new OpcItem("Random.Real4",OpcDaClient.Comn.OpcDataType.Float);
 items[1] = new OpcItem("Random.Int4", OpcDaClient.Comn.OpcDataType.Int);
 g1.AddOpcItem(items);
-g1.OnDataChanged += new EventHandler<OpcEventArgs>(onDataChange);
-
-void onDataChange(object? sender,OpcEventArgs e)
+g1.OnDataChanged += new OpcGroup.OnDataChangedHandler(onDataChange); 
+void onDataChange(OpcDaClient.Da.OpcItem[] items)
 {
-    Console.WriteLine("ddddddddddddd");
+    foreach (OpcItem item in items)
+    {
+        Console.WriteLine("{0},{1},{2},{3}",item.Name,item.Value,item.Quality,item.TimeStamp);
+    }
 }
 
 Console.Read();

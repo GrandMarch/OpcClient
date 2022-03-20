@@ -348,6 +348,7 @@ namespace OpcDaClient.Da
         {
             if (OnDataChanged != null)
             {
+                List<OpcItem> itemChanged=new List<OpcItem>();
                 for (int i = 0; i < dwCount; i++)
                 {
                     int index = opcItems.FindIndex(x => x.ClientHandle == phClientItems[i]);
@@ -356,8 +357,10 @@ namespace OpcDaClient.Da
                         opcItems[index].Value=pvValues[i];
                         opcItems[index].Quality=pwQualities[i];
                         opcItems[index].TimeStamp= OpcDaClient.Comn.Convert.FileTimeToDateTime(pftTimeStamps[i]);
+                        itemChanged.Add(opcItems[index]);
                     }
                 }
+                OnDataChanged.Invoke(itemChanged.ToArray());
             }
             Console.WriteLine("-==========OnDataChange Event==========-");
 
