@@ -39,6 +39,8 @@ namespace OpcDaAsync.Da
         public object? Value { get; set; }
         public int ClientHandle { get; private set; }
         public int ServerHandle { get; set; }
+        public int Quality { get; set; } = OpcRcw.Da.Qualities.OPC_QUALITY_BAD;
+        public DateTime TimeStamp { get; set; }=new DateTime(0);
         public OpcItem(string itemId, Comn.OpcDataType dataType)
         {
             Name = itemId;

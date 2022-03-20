@@ -113,10 +113,12 @@ namespace OpcDaAsync.Da
 
         #region Event
 
+        public delegate void OnDataChangedHandler(OpcItem[] opcItems);
         /// <summary>
         /// datachange subscribe
         /// </summary>
-        public event EventHandler<OpcEventArgs>? OnDataChanged;
+        //public event EventHandler<OpcEventArgs>? OnDataChanged;\
+        public event OnDataChangedHandler OnDataChanged;
         /// <summary>
         /// write async
         /// </summary>
@@ -287,7 +289,7 @@ namespace OpcDaAsync.Da
             //
             m_ItemManagement = (OpcRcw.Da.IOPCItemMgt)groupPointer;
             m_Async2IO = (OpcRcw.Da.IOPCAsyncIO2)groupPointer;
-            m_SyncIO= (OpcRcw.Da.IOPCSyncIO)groupPointer;
+            m_SyncIO = (OpcRcw.Da.IOPCSyncIO)groupPointer;
             //group state object
             m_StateManagement = (OpcRcw.Da.IOPCGroupStateMgt)groupPointer;
             m_ConnectionPointContainer = (OpcRcw.Comn.IConnectionPointContainer)groupPointer;
@@ -344,19 +346,21 @@ namespace OpcDaAsync.Da
                                 System.Runtime.InteropServices.ComTypes.FILETIME[] pftTimeStamps,
                                 int[] pErrors)
         {
-            var e = new OpcEventArgs
-            {
-                GroupHandle = hGroup,
-                Count = dwCount,
-                Errors = pErrors,
-                Values = pvValues,
-                ClientItemsHandle = phClientItems
-            };
             if (OnDataChanged != null)
             {
-                OnDataChanged(this, e);
+                for (int i = 0; i < dwCount; i++)
+                {
+                    int index = opcItems.FindIndex(x => x.ClientHandle == phClientItems[i]);
+                    if (index >= 0)
+                    {
+                        opcItems[index].Value=pvValues[i];
+                        opcItems[index].Quality=pwQualities[i];
+                        opcItems[index].TimeStamp= OpcDaClient.Comn.Convert.FileTimeToDateTime(pftTimeStamps[i]);
+                    }
+                }
             }
             Console.WriteLine("-==========OnDataChange Event==========-");
+
         }
 
         public void OnReadComplete(int dwTransid,
