@@ -8,4 +8,8 @@
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Da\OpcItemValue.cs" />
+  </ItemGroup>
+
 </Project>
