@@ -366,7 +366,9 @@ namespace OpcDaClient.Da
                 }
             }
             OnDataChanged?.Invoke(itemChanged.ToArray());
+#if DEBUG
             Console.WriteLine("-==========OnDataChange Event - Group:{0}==========-",Name);
+#endif
         }
 
         public void OnReadComplete(int dwTransid,
@@ -399,7 +401,9 @@ namespace OpcDaClient.Da
                 }
             }
             OnReadCompleted?.Invoke(itemChanged.ToArray());
+#if DEBUG
             Console.WriteLine("-==========OnReadComplete Event - Group:{0}==========-",Name);
+#endif
         }
 
         public void OnWriteComplete(int dwTransid,
@@ -423,7 +427,10 @@ namespace OpcDaClient.Da
                 }
             }
             OnWriteCompleted?.Invoke(itemwrite.ToArray());
-            Console.WriteLine("-==========OnWriteComplete Event - Group:{0}==========-",Name);
+#if DEBUG
+            Console.WriteLine("-==========OnWriteComplete Event - Group:{0}==========-", Name);
+#endif
+
         }
 
         public void OnCancelComplete(int dwTransid, int hGroup)
