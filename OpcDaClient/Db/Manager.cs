@@ -25,6 +25,23 @@ namespace OpcDaClient.Db
 
         private Config _config=new Config();
 
+        public object? this[string name]
+        {
+            get
+            {
+                try
+                {
+                    OpcDaClient.Da.OpcItem item = _db[name];
+                    return item.Value;
+                }
+                catch (Exception)
+                {
+
+                    return null;
+                }
+            }
+        }
+
         public bool Init()
         {
             string file=System.AppDomain.CurrentDomain.BaseDirectory+"opc.json";
@@ -68,9 +85,10 @@ namespace OpcDaClient.Db
                         OpcGroups.Add(g);
                         foreach (Config.Item item in group.Items)
                         {
-                            g.AddOpcItem(new Da.OpcItem[] { new Da.OpcItem(item.Name, item.DataType) });
+                            OpcDaClient.Da.OpcItem opcItem = new Da.OpcItem(item.Name, item.DataType);
+                            g.AddOpcItem(new Da.OpcItem[] { opcItem });
+                            _db.Add(opcItem.Name, opcItem);
                         }
-
                     }
                 }
             }
