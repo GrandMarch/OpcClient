@@ -11,4 +11,8 @@
     <ProjectReference Include="..\OpcDaClient\OpcDaClient.csproj" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(ProjectDir)opc.json&quot; &quot;$(TargetDir)&quot;" />
+  </Target>
+
 </Project>
