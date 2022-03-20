@@ -1,11 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using OpcDaClient.Da;
+//using OpcDaClient.Da;
 
 
 
-OpcDaClient.Db.Manager manager =new OpcDaClient.Db.Manager();
-manager.Init();
-manager.Run();
+//OpcDaClient.Db.Manager manager =new OpcDaClient.Db.Manager();
+//manager.Init();
+//manager.Run();
 //OpcServer server = new OpcServer("localhost", "Matrikon.OPC.Simulation.1");
 //server.Connect();
 //OpcGroup g1 = server.AddGroup("g1", true, 1000, 0.0f);
@@ -35,7 +35,7 @@ manager.Run();
 //    }
 //}
 
-Console.Read();
-manager.Stop();
+//Console.Read();
+//manager.Stop();
 //g1.Dispose();
 //server.Dispose();
