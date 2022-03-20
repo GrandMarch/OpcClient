@@ -8,10 +8,26 @@
             "DeadBand": 0.0,
             "UpdateRate": 1000,
             "Items": [
-                {
-                    "Name": "Random.Real4",
-                    "DataType": 4
-                }
+              {
+                "Name": "Random.Real4",
+                "DataType": 4
+              },
+              {
+                "Name": "Random.Int4",
+                "DataType": 3
+              },
+              {
+                "Name": "Random.Int2",
+                "DataType": 3
+              },
+              {
+                "Name": "Saw-toothed Waves.Int4",
+                "DataType": 4
+              },
+              {
+                "Name": "Random.String",
+                "DataType": 8
+              }
             ]
         }
     ]
