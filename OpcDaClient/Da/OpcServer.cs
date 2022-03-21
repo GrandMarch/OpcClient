@@ -88,7 +88,6 @@ namespace OpcDaClient.Da
         public OpcGroup AddGroup(string groupName)
         {
             //Groups.Add(group);
-            //TODO make a new group
             OpcGroup group = new OpcGroup(groupName);
             Guid riid = typeof(OpcRcw.Da.IOPCItemMgt).GUID;
             try
