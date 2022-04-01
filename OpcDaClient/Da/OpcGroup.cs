@@ -181,7 +181,7 @@ namespace OpcDaClient.Da
                     {
                         if (j != 0)
                         {
-                            Pos = new IntPtr(Pos.ToInt32() + Marshal.SizeOf(typeof(OpcRcw.Da.OPCITEMRESULT)));
+                            Pos = IntPtr.Add(Pos, Marshal.SizeOf(typeof(OpcRcw.Da.OPCITEMRESULT)));
                         }
                         object? o = Marshal.PtrToStructure(Pos, typeof(OpcRcw.Da.OPCITEMRESULT));
                         if (o != null)
