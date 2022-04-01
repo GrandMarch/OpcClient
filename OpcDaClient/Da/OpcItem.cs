@@ -29,7 +29,7 @@ namespace OpcDaClient.Da
         /// <summary>
         /// 数据项在opc server的完全名称
         /// </summary>
-        public string ItemID { get; private set; }
+        public string ItemID { get; private set; }=String.Empty;
         /// <summary>
         /// active(1) or not(0)
         /// </summary>
@@ -38,9 +38,14 @@ namespace OpcDaClient.Da
         public IntPtr Blob { get; set; } = IntPtr.Zero;
         public object? Value { get; set; }
         public int ClientHandle { get; private set; }
-        public int ServerHandle { get; set; }
+        public int ServerHandle { get; set; } 
         public int Quality { get; set; } = OpcRcw.Da.Qualities.OPC_QUALITY_BAD;
         public DateTime TimeStamp { get; set; }=new DateTime(0);
+
+        internal OpcItem()
+        {
+            
+        }
         public OpcItem(string itemId, Comn.OpcDataType dataType)
         {
             Name = itemId;
