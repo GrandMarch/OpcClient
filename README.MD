@@ -27,3 +27,5 @@ Test是一个基本的例子，OpcDaClient是opc读取的类库。该类库主�
 
 ### 运行截取
 ![输入图片说明](img/Screen1.png)
+## License
+部分代码来自于OPC基金会基于MIT协议开源的代码。本仓开使用MIT协议发布。
