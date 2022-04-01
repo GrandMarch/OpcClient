@@ -25,3 +25,5 @@ Test是一个基本的例子，OpcDaClient是opc读取的类库。该类库主�
             String=8
         }
 
+### 运行截取
+![输入图片说明](img/Screen1.png)
