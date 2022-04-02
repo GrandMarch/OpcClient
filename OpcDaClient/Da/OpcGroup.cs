@@ -99,7 +99,7 @@ namespace OpcDaClient.Da
         #region private 
 
         private static int _handle = 0;
-        private int lcid = 0x407;
+        private int lcid = 0x0;
         private GCHandle timeBias = GCHandle.Alloc(0, GCHandleType.Pinned);
         private GCHandle percendDeadBand = GCHandle.Alloc(0, GCHandleType.Pinned);
         //private Guid riid = typeof(IOPCItemMgt).GUID;
