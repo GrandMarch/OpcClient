@@ -93,6 +93,8 @@ namespace OpcDaClient.Da
         /// <returns></returns>
         public OpcGroup AddGroup(string groupName)
         {
+            if (null == m_OpcServer || IsConnected == false)
+                throw new NullReferenceException("OpcServer is null");
             //Groups.Add(group);
             OpcGroup group = new OpcGroup(groupName);
             Guid riid = typeof(OpcRcw.Da.IOPCItemMgt).GUID;
@@ -136,6 +138,8 @@ namespace OpcDaClient.Da
         /// <returns></returns>
         public OpcGroup AddGroup(string groupName, bool active, int reqUpdateRate, float deadBand)
         {
+            if (null == m_OpcServer || IsConnected == false)
+                throw new NullReferenceException("OpcServer is null");
             OpcGroup group = new OpcGroup(groupName, active,reqUpdateRate,deadBand);
             Guid riid = typeof(OpcRcw.Da.IOPCItemMgt).GUID;
             try
@@ -183,6 +187,8 @@ namespace OpcDaClient.Da
         /// <returns></returns>
         public ServerInfo GetServerStatus()
         {
+            if (null == m_OpcServer || IsConnected == false)
+                throw new NullReferenceException("OpcServer is null");
             IntPtr statusPtr=IntPtr.Zero;
             m_OpcServer?.GetStatus(out statusPtr);
             OpcRcw.Da.OPCSERVERSTATUS status;
