@@ -212,6 +212,44 @@ namespace OpcDaClient.Da
         }
 
         /// <summary>
+        /// 删除item
+        /// </summary>
+        /// <param name="items"></param>
+        public bool[] RemoveItem(OpcItem[] items)
+        {
+            IntPtr pErrors = IntPtr.Zero;
+            bool[] result = new bool[items.Length];
+            int[] errors = new int[items.Length];
+            int[] handles = new int[items.Length];
+            for (int i = 0; i < items.Length; i++)
+            {
+                handles[i] = items[i].ServerHandle;
+            }
+            try
+            {
+                m_ItemManagement?.RemoveItems(handles.Length, handles, out pErrors);
+                Marshal.Copy(pErrors, errors, 0, items.Length);
+            }
+            catch (Exception)
+            {
+                //return result;
+                throw;
+            }
+            finally
+            {
+                if (pErrors != IntPtr.Zero)
+                {
+                    Marshal.FreeCoTaskMem(pErrors);
+                }
+            }
+            for (int i = 0; i < errors.Length; i++)
+            {
+                result[i] = errors[i] == 0;
+            }
+            return result;
+        }
+
+        /// <summary>
         /// async read
         /// </summary>
         public void ReadAsync()
