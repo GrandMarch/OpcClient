@@ -60,20 +60,26 @@ namespace OpcDaClient.Da
             {
                 try
                 {
-#pragma warning disable CA1416 // 验证平台兼容性
-                    Type? opcServerType = Type.GetTypeFromProgID(ProgramID, Host, true);
-#pragma warning restore CA1416 // 验证平台兼容性
-                    if (opcServerType != null)
+                    Discovery.OpcDiscovery discovery = new();
+                    Discovery.ServerInfo? info = discovery.GetOpcServer(ProgramID, Host);
+                    if (info == null)
                     {
-                        object? o = Activator.CreateInstance(opcServerType);
-                        if (o != null) m_OpcServer = (OpcRcw.Da.IOPCServer)o;
-                        IsConnected = true;
+                        IsConnected = false;
+                        return false;
                     }
+                    object? o = Comn.ComInterop.CreateInstance(info.CLSID, Host);
+                    if (o == null)
+                    {
+                        IsConnected = false;
+                        return false;
+                    }
+                    m_OpcServer = (OpcRcw.Da.IOPCServer)o;
+                    IsConnected = true;
                     return true;
                 }
-                catch (Exception)
+                catch (Exception )
                 {
-                    IsConnected = false;
+                    return false;
                     throw;
                 }
             }
