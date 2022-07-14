@@ -1,6 +1,6 @@
 {
-    "OpcServer": "Matrikon.OPC.Simulation.1",
-    "Host": "localhost",
+    "OpcServer": "Matrikon.OPC.Simulation",
+    "Host": "192.168.56.142",
     "Groups": [
         {
             "Name": "g1",

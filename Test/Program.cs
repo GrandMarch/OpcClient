@@ -1,4 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
+//
+//测试程序连接的是虚拟机的opc server
+//vs运行在宿主机，通过远程调试的方式在192.168.56.136运行改测试程序
+//测试程序连接到192.168.56.142的opc server
+//
 ConsoleKeyInfo cki;
 OpcDaClient.Manager.Manager manager = new OpcDaClient.Manager.Manager();
 manager.Init();
