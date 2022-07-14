@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 ConsoleKeyInfo cki;
-OpcDaClient.Db.Manager manager = new OpcDaClient.Db.Manager();
+OpcDaClient.Manager.Manager manager = new OpcDaClient.Manager.Manager();
 manager.Init();
 manager.Run();
 string [] tags=manager.GetTagName();

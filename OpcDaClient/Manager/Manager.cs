@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpcDaClient.Db
+namespace OpcDaClient.Manager
 {
     /// <summary>
     /// 数据管理类
