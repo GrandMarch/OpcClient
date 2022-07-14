@@ -63,10 +63,15 @@ namespace OpcDaClient.Discovery
                 // fetch class descriptions.
                 ServerInfo[] servers = GetServerDetails(clsids.ToArray());
 
+#if DEBUG
                 System.Diagnostics.Debug.WriteLine("Find Servers:");
                 for (int i = 0; i < servers.Length; i++)
                 {
                     System.Diagnostics.Debug.WriteLine($"index={i},server={servers[i].ProgID}/{servers[i].VerIndProgID}");
+                }
+#endif
+                for (int i = 0; i < servers.Length; i++)
+                {
                     if (servers[i].ProgID.ToLower() == serverName.ToLower() || servers[i].VerIndProgID.ToLower() == serverName.ToLower())
                     {
                         result = servers[i];
