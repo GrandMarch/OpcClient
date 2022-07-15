@@ -196,9 +196,9 @@ namespace OpcDaClient.Comn
                     results);
 #pragma warning restore CS8625 // 无法将 null 字面量转换为非 null 的引用类型。
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new ExternalException("CoCreateInstanceEx: " + ex.Message);
             }
             finally
             {
@@ -207,7 +207,7 @@ namespace OpcDaClient.Comn
 
             if (results[0].hr != 0)
             {
-                throw new ExternalException("CoCreateInstanceEx: " + (int)results[0].hr);
+                throw new ExternalException("CoCreateInstanceEx: " + GetSystemMessage((int)results[0].hr));
             }
             return results[0].pItf;
         }

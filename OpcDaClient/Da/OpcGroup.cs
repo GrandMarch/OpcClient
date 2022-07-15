@@ -194,9 +194,9 @@ namespace OpcDaClient.Da
                     }
                 }
             }
-            catch (COMException)
+            catch (COMException ex)
             {
-                throw;
+                throw new ExternalException("Add Item Error:"+ex.Message+"\nCode="+ex.ErrorCode);
             }
             finally
             {
@@ -270,9 +270,9 @@ namespace OpcDaClient.Da
                     Marshal.Copy(pErrors, PErrors, 0, opcItems.Count);
                 }
             }
-            catch (COMException)
+            catch (COMException ex)
             {
-                throw;
+                throw new ExternalException("ReadAsync Error:" + ex.Message + "\nCode=" + ex.ErrorCode);
             }
             finally
             {
@@ -301,9 +301,9 @@ namespace OpcDaClient.Da
                     m_Async2IO.Write(values.Length, serverHandle, values, transactionID, out cancelId, out pErrors);
                     Marshal.Copy(pErrors, errors, 0, values.Length);
                 }
-                catch (COMException)
+                catch (COMException ex)
                 {
-                    throw;
+                    throw new ExternalException("WriteAsync Error:" + ex.Message + "\nCode=" + ex.ErrorCode);
                 }
                 finally
                 {
@@ -363,9 +363,9 @@ namespace OpcDaClient.Da
                                             pLCID,
                                             hClientGroup);
             }
-            catch (COMException)
+            catch (COMException ex) 
             {
-                throw;
+                throw new ExternalException("ActiveDataChanged Advise Error:" + ex.Message + "\nCode=" + ex.ErrorCode);
             }
             finally
             {

@@ -123,9 +123,9 @@ namespace OpcDaClient.Da
                 }
                 return group;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new ExternalException("Add Group Error:"+ex.Message);
             }
         }
         /// <summary>
@@ -167,9 +167,9 @@ namespace OpcDaClient.Da
                 }
                 return group;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new ExternalException("Add Group Error:" + ex.Message);
             }
         }
         public void RemoveGroup(OpcGroup group)
