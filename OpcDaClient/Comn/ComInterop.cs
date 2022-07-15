@@ -14,6 +14,62 @@ namespace OpcDaClient.Comn
     internal class ComInterop
     {
         private static readonly Guid IID_IUnknown = new Guid("00000000-0000-0000-C000-000000000046");
+
+        #region const
+        private const uint RPC_C_AUTHN_NONE = 0;
+        private const uint RPC_C_AUTHN_DCE_PRIVATE = 1;
+        private const uint RPC_C_AUTHN_DCE_PUBLIC = 2;
+        private const uint RPC_C_AUTHN_DEC_PUBLIC = 4;
+        private const uint RPC_C_AUTHN_GSS_NEGOTIATE = 9;
+        private const uint RPC_C_AUTHN_WINNT = 10;
+        private const uint RPC_C_AUTHN_GSS_SCHANNEL = 14;
+        private const uint RPC_C_AUTHN_GSS_KERBEROS = 16;
+        private const uint RPC_C_AUTHN_DPA = 17;
+        private const uint RPC_C_AUTHN_MSN = 18;
+        private const uint RPC_C_AUTHN_DIGEST = 21;
+        private const uint RPC_C_AUTHN_MQ = 100;
+        private const uint RPC_C_AUTHN_DEFAULT = 0xFFFFFFFF;
+
+        private const uint RPC_C_AUTHZ_NONE = 0;
+        private const uint RPC_C_AUTHZ_NAME = 1;
+        private const uint RPC_C_AUTHZ_DCE = 2;
+        private const uint RPC_C_AUTHZ_DEFAULT = 0xffffffff;
+
+        private const uint RPC_C_AUTHN_LEVEL_DEFAULT = 0;
+        private const uint RPC_C_AUTHN_LEVEL_NONE = 1;
+        private const uint RPC_C_AUTHN_LEVEL_CONNECT = 2;
+        private const uint RPC_C_AUTHN_LEVEL_CALL = 3;
+        private const uint RPC_C_AUTHN_LEVEL_PKT = 4;
+        private const uint RPC_C_AUTHN_LEVEL_PKT_INTEGRITY = 5;
+        private const uint RPC_C_AUTHN_LEVEL_PKT_PRIVACY = 6;
+
+        private const uint RPC_C_IMP_LEVEL_ANONYMOUS = 1;
+        private const uint RPC_C_IMP_LEVEL_IDENTIFY = 2;
+        private const uint RPC_C_IMP_LEVEL_IMPERSONATE = 3;
+        private const uint RPC_C_IMP_LEVEL_DELEGATE = 4;
+
+        private const uint EOAC_NONE = 0x00;
+        private const uint EOAC_MUTUAL_AUTH = 0x01;
+        private const uint EOAC_CLOAKING = 0x10;
+        private const uint EOAC_STATIC_CLOAKING = 0x20;
+        private const uint EOAC_DYNAMIC_CLOAKING = 0x40;
+        private const uint EOAC_SECURE_REFS = 0x02;
+        private const uint EOAC_ACCESS_CONTROL = 0x04;
+        private const uint EOAC_APPID = 0x08;
+
+        /// <summary>
+        /// The WIN32 system default locale.
+        /// </summary>
+        private const int LOCALE_SYSTEM_DEFAULT = 0x800;
+
+        /// <summary>
+        /// The WIN32 user default locale.
+        /// </summary>
+        private const int LOCALE_USER_DEFAULT = 0x400;
+        #endregion
+
+        #region struct
+
         private struct COSERVERINFO
         {
             public uint dwReserved1;
@@ -30,13 +86,76 @@ namespace OpcDaClient.Comn
             public uint hr;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        private struct SOLE_AUTHENTICATION_SERVICE
+        {
+            public uint dwAuthnSvc;
+            public uint dwAuthzSvc;
+            [MarshalAs(UnmanagedType.LPWStr)]
+            public string pPrincipalName;
+            public int hr;
+        }
+
+        #endregion
+
+        #region win32 api
+
         [DllImport("ole32.dll")]
         private static extern void CoCreateInstanceEx(ref Guid clsid,
-                                                    [MarshalAs(UnmanagedType.IUnknown)] object punkOuter,
-                                                    uint dwClsCtx,
-                                                    [In] ref COSERVERINFO pServerInfo,
-                                                    uint dwCount,
-                                                    [In, Out] MULTI_QI[] pResults);
+                                            [MarshalAs(UnmanagedType.IUnknown)] object punkOuter,
+                                            uint dwClsCtx,
+                                            [In] ref COSERVERINFO pServerInfo,
+                                            uint dwCount,
+                                            [In, Out] MULTI_QI[] pResults);
+        [DllImport("ole32.dll")]
+        private static extern int CoInitializeSecurity(
+                                                    IntPtr pSecDesc,
+                                                    int cAuthSvc,
+                                                    SOLE_AUTHENTICATION_SERVICE[]? asAuthSvc,
+                                                    IntPtr pReserved1,
+                                                    uint dwAuthnLevel,
+                                                    uint dwImpLevel,
+                                                    IntPtr pAuthList,
+                                                    uint dwCapabilities,
+                                                    IntPtr pReserved3);
+        [DllImport("Kernel32.dll")]
+        private static extern int GetSystemDefaultLangID();
+        [DllImport("Kernel32.dll")]
+        private static extern int GetUserDefaultLangID();
+        [DllImport("Kernel32.dll")]
+        private static extern int FormatMessageW(
+                                                    int dwFlags,
+                                                    IntPtr lpSource,
+                                                    int dwMessageId,
+                                                    int dwLanguageId,
+                                                    IntPtr lpBuffer,
+                                                    int nSize,
+                                                    IntPtr Arguments);
+
+        #endregion
+
+
+        /// <summary>
+        /// Initializes COM security.
+        /// </summary>
+        public static void InitializeSecurity()
+        {
+            int error = CoInitializeSecurity(
+                IntPtr.Zero,
+                -1,
+                null,
+                IntPtr.Zero,
+                RPC_C_AUTHN_LEVEL_CONNECT,
+                RPC_C_IMP_LEVEL_IMPERSONATE,
+                IntPtr.Zero,
+                EOAC_NONE,
+                IntPtr.Zero);
+
+            if (error != 0)
+            {
+                throw new ExternalException("CoInitializeSecurity: " + GetSystemMessage(error), error);
+            }
+        }
         /// <summary>
         /// Creates an instance of a COM server.
         /// </summary>
@@ -153,6 +272,36 @@ namespace OpcDaClient.Comn
             while (fetched > 0);
 
             return guids.ToArray();
+        }
+
+        /// <summary>
+        /// Retrieves the system message text for the specified error.
+        /// </summary>
+        public static string GetSystemMessage(int error)
+        {
+            const int MAX_MESSAGE_LENGTH = 1024;
+            const uint FORMAT_MESSAGE_IGNORE_INSERTS = 0x00000200;
+            const uint FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000;
+
+            IntPtr buffer = Marshal.AllocCoTaskMem(MAX_MESSAGE_LENGTH);
+
+            int result = FormatMessageW(
+                (int)(FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM),
+                IntPtr.Zero,
+                error,
+                0,
+                buffer,
+                MAX_MESSAGE_LENGTH - 1,
+                IntPtr.Zero);
+
+            string? msg = Marshal.PtrToStringUni(buffer);
+            Marshal.FreeCoTaskMem(buffer);
+
+            if (!string.IsNullOrEmpty(msg))
+            {
+                return msg;
+            }
+            return string.Format("0x{0,0:X}", error);
         }
     }
 }
