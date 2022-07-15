@@ -90,7 +90,7 @@ namespace OpcDaClient.Da
         #endregion
 
         #region internal
-        internal object? groupPointer = 0;
+        internal object? groupPointer = null;
         internal int revisedUpdateRate = 0;
         internal int serverGroupHandle = 0;
 
