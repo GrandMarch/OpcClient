@@ -16,7 +16,7 @@ namespace OpcDaClient.Manager
         /// <summary>
         /// 所有的点名都不能重复
         /// </summary>
-        private SortedList<string, OpcDaClient.Da.OpcItem> _db = new SortedList<string, OpcDaClient.Da.OpcItem>();
+        private TagCache tagCache = new();
         /// <summary>
         /// server
         /// </summary>
@@ -31,12 +31,12 @@ namespace OpcDaClient.Manager
             {
                 try
                 {
-                    OpcDaClient.Da.OpcItem item = _db[name];
-                    return item.Value;
+                    //OpcDaClient.Da.OpcItem item = _db[name];
+                    //return item.Value;
+                    return tagCache.Read(name);
                 }
                 catch (Exception)
                 {
-
                     return null;
                 }
             }
@@ -87,7 +87,7 @@ namespace OpcDaClient.Manager
                         {
                             OpcDaClient.Da.OpcItem opcItem = new Da.OpcItem(item.Name, item.DataType);
                             g.AddOpcItem(new Da.OpcItem[] { opcItem });
-                            _db.Add(opcItem.Name, opcItem);
+                            tagCache.AddOrUpdate(opcItem);
                         }
                     }
                 }
@@ -111,9 +111,9 @@ namespace OpcDaClient.Manager
             }
             _server?.Dispose();
         }
-        public string[] GetTagName()
+        public string[] GetTagNames()
         {
-            return _db.Keys.ToArray();
+            return tagCache.GetAllTagNames();
         }
     }
 }

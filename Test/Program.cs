@@ -8,7 +8,7 @@ ConsoleKeyInfo cki;
 OpcDaClient.Manager.Manager manager = new OpcDaClient.Manager.Manager();
 manager.Init();
 manager.Run();
-string [] tags=manager.GetTagName();
+string [] tags=manager.GetTagNames();
 while (true)
 {
     Console.Write("Press ");
