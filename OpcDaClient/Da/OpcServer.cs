@@ -199,11 +199,11 @@ namespace OpcDaClient.Da
                 if (null != o)
                 {
                     status = (OpcRcw.Da.OPCSERVERSTATUS)o;
-                    ServerStatus.Version = status.wMajorVersion.ToString()+"."+status.wMinorVersion.ToString()+"."+status.wBuildNumber.ToString();
+                    ServerStatus.Version = status.wMajorVersion.ToString() + "." + status.wMinorVersion.ToString() + "." + status.wBuildNumber.ToString();
                     ServerStatus.ServerState = status.dwServerState;
-                    ServerStatus.StartTime = new DateTime(status.ftStartTime.dwHighDateTime << 32 + status.ftStartTime.dwLowDateTime);
-                    ServerStatus.CurrentTime = new DateTime(status.ftCurrentTime.dwHighDateTime << 32 + status.ftCurrentTime.dwLowDateTime);
-                    ServerStatus.LastUpdateTime = new DateTime(status.ftLastUpdateTime.dwHighDateTime << 32 + status.ftLastUpdateTime.dwLowDateTime);
+                    ServerStatus.StartTime = Comn.Convert.FileTimeToDateTime(status.ftStartTime);
+                    ServerStatus.CurrentTime = Comn.Convert.FileTimeToDateTime(status.ftCurrentTime);
+                    ServerStatus.LastUpdateTime = Comn.Convert.FileTimeToDateTime(status.ftLastUpdateTime);
                     ServerStatus.VendorInfo = status.szVendorInfo;
                 }
             }
